@@ -1,13 +1,13 @@
 {
   "name": "@liugezhou-cli-dev/core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "liugezhou-cli-dev core",
   "author": "liumingzhou <18231133236@163.com>",
   "homepage": "",
   "license": "ISC",
   "main": "lib/core.js",
-  "bin":{
-    "liugezhou-cli-dev":"bin/index.js"
+  "bin": {
+    "liugezhou-cli-dev": "bin/index.js"
   },
   "directories": {
     "lib": "lib",
