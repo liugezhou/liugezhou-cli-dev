@@ -1,6 +1,6 @@
 {
   "name": "@liugezhou-cli-dev/core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "liugezhou-cli-dev core",
   "author": "liumingzhou <18231133236@163.com>",
   "homepage": "",
@@ -20,6 +20,6 @@
     "test": "echo \"Run testing from core\" "
   },
   "dependencies": {
-    "@liugezhou-cli-dev/utils": "^1.0.1"
+    "@liugezhou-cli-dev/utils": "^1.0.2"
   }
 }
