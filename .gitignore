@@ -1,5 +1,5 @@
 .vscode
 .idea
-node_modues
-packages/**/node_modules
+node_modues/
+**/node_modues
 lerna-debug.log
