@@ -1,0 +1,31 @@
+{
+  "name": "@liugezhou-cli-dev/core",
+  "version": "1.0.1",
+  "description": "liugezhou-cli-dev core",
+  "author": "liumingzhou <18231133236@163.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "lib/core.js",
+  "bin": {
+    "liugezhou-cli-dev": "bin/index.js"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "echo \"Run testing from core\" "
+  },
+  "dependencies": {
+    "@liugezhou-cli-dev/utils": "file:../../utils/utils",
+    "@liugezhou-cli-dev/log": "file:../../utils/log",
+    "import-local": "^3.0.2",
+    "npmlog": "^4.1.2"
+  }
+}
