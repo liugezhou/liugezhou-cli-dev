@@ -23,9 +23,16 @@
     "test": "echo \"Run testing from core\" "
   },
   "dependencies": {
-    "@liugezhou-cli-dev/utils": "file:../../utils/utils",
     "@liugezhou-cli-dev/log": "file:../../utils/log",
+    "@liugezhou-cli-dev/utils": "file:../../utils/utils",
+    "colors": "^1.4.0",
+    "dotenv": "^8.2.0",
     "import-local": "^3.0.2",
-    "npmlog": "^4.1.2"
+    "minimist": "^1.2.5",
+    "npmlog": "^4.1.2",
+    "path-exists": "^4.0.0",
+    "root-check": "^1.0.0",
+    "semver": "^7.3.4",
+    "user-home": "^2.0.0"
   }
 }
