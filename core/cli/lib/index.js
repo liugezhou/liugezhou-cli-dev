@@ -16,9 +16,8 @@ const pkg = require('../package.json')
 const log = require('@liugezhou-cli-dev/log')
 const constant = require('./constant');
 const pathExists = require('path-exists');
-let args,config;
-
-function core() {
+let args;
+async function core() {
     try{
         checkPkgVersion();
         checkNodeVersion() ;
@@ -26,6 +25,7 @@ function core() {
         checkUserHome();
         checkInputArgs();
         checkEnv();
+        await checkGlobalUpdate();
     }catch(e){
         log.error(e.message)
     }
@@ -95,4 +95,20 @@ function createDefaultConfig(){
     }
     process.env.CLI_HOME_PATH = cliConfig.cliHome
     return cliConfig;
+}
+
+async function  checkGlobalUpdate(){
+    // 1 获取当前版本号和模块名
+    const currentVersion = pkg.version
+    const npmName = pkg.name
+    // 2 调用npm API，获取所有的版本号
+    const { getNpmSemverVersion } = require('@liugezhou-cli-dev/get-npm-info')
+    // 3 提取所有版本号，比对那些版本号是大于当前版本号的
+    const lastVersion = await getNpmSemverVersion(currentVersion,npmName)
+    // 4 获取最新的版本号，提示用户更新到该版本
+    if(lastVersion && semver.gt(lastVersion,currentVersion)){
+        log.warn('更新提示:',colors.yellow(`请手动更新${npmName}，当前版本：${currentVersion},最新版本为：${lastVersion}
+          更新命令为: npm install -g ${npmName}）`))
+    }
+
 }
