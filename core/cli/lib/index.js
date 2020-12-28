@@ -12,11 +12,15 @@ const semver = require('semver')
 const colors = require('colors/safe')
 const userHome = require('user-home')
 const ptahExists = require('path-exists').sync
+const commander = require('commander');
 const pkg = require('../package.json')
 const log = require('@liugezhou-cli-dev/log')
 const constant = require('./constant');
 const pathExists = require('path-exists');
+
 let args;
+let  program = new commander.Command();
+
 async function core() {
     try{
         checkPkgVersion();
@@ -26,6 +30,7 @@ async function core() {
         checkInputArgs();
         checkEnv();
         await checkGlobalUpdate();
+        registerCommand();
     }catch(e){
         log.error(e.message)
     }
@@ -111,4 +116,11 @@ async function  checkGlobalUpdate(){
           更新命令为: npm install -g ${npmName}）`))
     }
 
+}
+
+function  registerCommand(){
+    program
+        .version(pkg.version);
+
+    program.parse(process.argv);
 }
