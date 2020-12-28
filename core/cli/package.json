@@ -26,6 +26,7 @@
     "@liugezhou-cli-dev/get-npm-info": "file:../../utils/get-npm-info",
     "@liugezhou-cli-dev/log": "file:../../utils/log",
     "@liugezhou-cli-dev/utils": "file:../../utils/utils",
+    "@liugezhou-cli-dev/init": "file:../../commands/init",
     "colors": "^1.4.0",
     "commander": "^6.2.1",
     "dotenv": "^8.2.0",

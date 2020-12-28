@@ -15,6 +15,7 @@ const ptahExists = require('path-exists').sync
 const commander = require('commander');
 const pkg = require('../package.json')
 const log = require('@liugezhou-cli-dev/log')
+const init = require('@liugezhou-cli-dev/init')
 const constant = require('./constant');
 const pathExists = require('path-exists');
 
@@ -27,7 +28,7 @@ async function core() {
         checkNodeVersion() ;
         checkRoot();
         checkUserHome();
-        checkInputArgs();
+        // checkInputArgs();
         checkEnv();
         await checkGlobalUpdate();
         registerCommand();
@@ -65,7 +66,7 @@ function checkUserHome(){
 function checkInputArgs(){
     const minimist = require('minimist')
     args = minimist(process.argv.slice(2))
-    checkArgs()
+   checkArgs()
 }
 
 function checkArgs(){
@@ -120,7 +121,39 @@ async function  checkGlobalUpdate(){
 
 function  registerCommand(){
     program
-        .version(pkg.version);
+        .name(Object.keys(pkg.bin)[0])
+        .usage('<command> [options]')
+        .version(pkg.version)
+        .option('-d,--debug','是否开启调试模式',false)
+
+    program
+        .command('init [projectName]')
+        .option('-f, --force','是否强制初始化项目')
+        .action(init)
+        // 开启debug模式
+    program.on('option:debug',function(){
+        if(program.debug){
+            process.env.LOG_LEVEL='verbose'
+        }else{
+            process.env.LOG_LEVEL='info'
+        }
+        log.level = process.env.LOG_LEVEL
+        log.verbose('debug')
+    })
+
+    // 对未知命令监听
+    program.on('command:*',function(obj){
+        const avaliabeCommands = program.commands.map(cmd => cmd.name())
+        console.log(colors.red('未知的命令：'+obj[0]))
+        if(avaliabeCommands.length > 0){
+            console.log(colors.red('可用命令为：'+avaliabeCommands.join(',')))
+        }
+    })
 
     program.parse(process.argv);
+
+    if(program.args && program.args.length < 1) {
+        program.outputHelp();
+        console.log()
+    }
 }
