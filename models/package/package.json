@@ -27,8 +27,12 @@
     "url": "https://github.com/liugezhou/liugezhou-cli-dev/issues"
   },
   "dependencies": {
-    "@liugezhou-cli-dev/utils": "file:../../utils/utils",
     "@liugezhou-cli-dev/format-path": "file:../../utils/format-path",
+    "@liugezhou-cli-dev/get-npm-info": "file:../../utils/get-npm-info",
+    "@liugezhou-cli-dev/utils": "file:../../utils/utils",
+    "fs-extra": "^9.0.1",
+    "npminstall": "^4.10.0",
+    "path-exists": "^4.0.0",
     "pkg-dir": "^5.0.0"
   }
 }
