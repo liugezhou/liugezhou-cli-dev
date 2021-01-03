@@ -2,7 +2,8 @@
 
 const pkgDir = require('pkg-dir').sync;
 const path = require('path');
-const { isObject }  = require('@liugezhou-cli-dev/utils')
+const { isObject }  = require('@liugezhou-cli-dev/utils');
+const formatPath  = require('@liugezhou-cli-dev/format-path');
 class Package  {
     constructor(options){
         if( !options){
@@ -14,7 +15,7 @@ class Package  {
         //package的目标路径
         this.targetPath = options.targetPath;
         //package的缓存路径
-        this.storePath = options.storePath  
+        // this.storePath = options.storePath  
         //package的name
         this.PackageName=options.name
         // package的version
@@ -35,12 +36,15 @@ class Package  {
     }
     // 获取入口文件的路径
     getRootFilePath(){
+        // 1.获取package.json所在目录
         const dir = pkgDir(this.targetPath)
-        console.log(dir)
         if(dir){
+            //2.读取package.json
             const pkgFile = require(path.resolve(dir,'package.json'))
+            //3. 寻找main/lib
             if(pkgFile && pkgFile.main ){
-                return path.resolve(dir, pkgFile.main)
+                //4.路径的兼容(macOS/windows)
+                return formatPath(path.resolve(dir, pkgFile.main))
             }
         }
         return null

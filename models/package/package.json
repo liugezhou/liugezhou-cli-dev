@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@liugezhou-cli-dev/utils": "file:../../utils/utils",
+    "@liugezhou-cli-dev/format-path": "file:../../utils/format-path",
     "pkg-dir": "^5.0.0"
   }
 }
