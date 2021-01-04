@@ -1,7 +1,7 @@
 {
-  "name": "@liugezhou-cli-dev/init",
+  "name": "@liugezhou-cli-dev/command",
   "version": "1.0.0",
-  "description": "liugezhou-cli-dev init",
+  "description": "liugezhou-cli-dev command",
   "author": "liumingzhou <18231133236@163.com>",
   "homepage": "https://github.com/liugezhou/liugezhou-cli-dev#readme",
   "license": "ISC",
@@ -27,6 +27,8 @@
     "url": "https://github.com/liugezhou/liugezhou-cli-dev/issues"
   },
   "dependencies": {
-    "@liugezhou-cli-dev/command": "file:../../models/command"
+    "colors": "^1.4.0",
+    "semver": "^7.3.4",
+    "@liugezhou-cli-dev/log": "file:../../utils/log"
   }
 }

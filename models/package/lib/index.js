@@ -1,10 +1,10 @@
 'use strict';
 
-const pkgDir = require('pkg-dir').sync;
 const path = require('path');
-const npminstall = require('npminstall');
-const pathExists = require('path-exists').sync;
 const fse = require('fs-extra');
+const pkgDir = require('pkg-dir').sync;
+const pathExists = require('path-exists').sync;
+const npminstall = require('npminstall');
 const { isObject }  = require('@liugezhou-cli-dev/utils');
 const formatPath  = require('@liugezhou-cli-dev/format-path');
 const {getDefaultRegistry,getNpmLatestVersion}  = require('@liugezhou-cli-dev/get-npm-info');
@@ -90,28 +90,28 @@ class Package  {
         }
         return latestFilePath;
     }
-    // 获取入口文件的路径
-    getRootFilePath(){
-        function _getRootFile(targetPath){
-        // 1.获取package.json所在目录
-        const dir = pkgDir(targetPath)
-        if(dir){
-            //2.读取package.json
-            const pkgFile = require(path.resolve(dir,'package.json'))
-            //3. 寻找main/lib
-            if(pkgFile && pkgFile.main ){
-                //4.路径的兼容(macOS/windows)
-                return formatPath(path.resolve(dir, pkgFile.main))
-            }
+  // 获取入口文件的路径
+  getRootFilePath() {
+    function _getRootFile(targetPath) {
+      // 1. 获取package.json所在目录
+      const dir = pkgDir(targetPath);
+      if (dir) {
+        // 2. 读取package.json
+        const pkgFile = require(path.resolve(dir, 'package.json'));
+        // 3. 寻找main/lib
+        if (pkgFile && pkgFile.main) {
+          // 4. 路径的兼容(macOS/windows)
+          return formatPath(path.resolve(dir, pkgFile.main));
         }
-        return null
-        }
-        if(this.storeDir){
-            return _getRootFile(this.chacheFilePath);
-        }else{
-            return _getRootFile(this.targetPath);
-        }
+      }
+      return null;
     }
+    if (this.storeDir) {
+      return _getRootFile(this.cacheFilePath);
+    } else {
+      return _getRootFile(this.targetPath);
+    }
+  }
 }
 
 module.exports = Package

@@ -5,25 +5,25 @@ const log = require('@liugezhou-cli-dev/log')
 const Package = require("@liugezhou-cli-dev/package")
 
 const SETTINGS = {
-   init:'@liugezhou-cli-dev/core'
+   init: '@imooc-cli/init'
 }
-const CATCH_DIR = 'dependencies/'
+const CATCH_DIR = 'dependencies'
+
 async function exec() {
    let targetPath = process.env.CLI_TARGET_PATH
    const homePath = process.env.CLI_HOME_PATH
-   let storeDir;
+   let storeDir ='';
    let pkg;
-   const cmdObj = arguments[arguments.length - 1]
-   const cmdName = cmdObj.name
-   const packageName = SETTINGS[cmdName]
-   const packageVersion = 'latest'
-
+   log.verbose('targetPath', targetPath);
+   log.verbose('homePath', homePath);
+   const cmdObj = arguments[arguments.length - 1];
+   const cmdName = cmdObj.name(); 
+   const packageName = SETTINGS[cmdName];
+   const packageVersion = 'latest';
    if(!targetPath){
       // 生成缓存路径
       targetPath = path.resolve(homePath,CATCH_DIR);
       storeDir = path.resolve(targetPath,'node_modules')
-      console.log(targetPath,storeDir)
-
        pkg = new Package({
          targetPath,
          storeDir,
@@ -46,7 +46,8 @@ async function exec() {
       });
       const rootFile = pkg.getRootFilePath()
       if(rootFile){
-         require(rootFile).apply(null,arguments);
+         //在当前进程中调用--> 要改造成在node的子进程中调用
+         require(rootFile).call(null,Array.from(arguments));
       }
    }
   
