@@ -1,5 +1,6 @@
 'use strict';
 
+const cp = require('child_process')
 const path = require('path')
 const log = require('@liugezhou-cli-dev/log')
 const Package = require("@liugezhou-cli-dev/package")
@@ -46,8 +47,36 @@ async function exec() {
       });
       const rootFile = pkg.getRootFilePath()
       if(rootFile){
-         //在当前进程中调用--> 要改造成在node的子进程中调用
-         require(rootFile).call(null,Array.from(arguments));
+         try{
+            //在当前进程中调用--> 要改造成
+            // require(rootFile).call(null,Array.from(arguments));
+            // 在node的子进程中调用
+            const args = Array.from(arguments)
+            const cmd = args[args.length - 1]
+            const o = Object.create(null)
+            Object.keys(cmd).forEach(key =>{
+               if(cmd.hasOwnProperty(key) && !key.startsWith('_') && key!=='parent'){
+                  o[key] = cmd[key]
+               }
+            })
+            args[args.length - 1] = o
+            const code = `require('${rootFile}').call(null,${JSON.stringify(args)})`
+            //win32下：cp.spawn('cmd',['/c'],'node','e',code)
+            const child = spawn( 'node',['-e', code],{
+               cwd: process.cwd(),
+               stdio:'inherit',
+            });
+            child.on('error', e =>{
+               log.error(e.message);
+               process.exit(1);
+            })
+            child.on('exit', e=>{
+               log.verbose('命令执行成功' + e);
+               process.exit(e);
+            })
+         }catch(e){
+            log.error(e.message)
+         }
       }
    }
   
@@ -58,6 +87,11 @@ async function exec() {
 
    // 封装--复用
 }
-
+function spawn(command,args,options){
+   const win32 = process.platform === 'win32';
+   const cmd = win32 ? 'cmd': command
+   const cmdArgs = win32  ?  ['/c'].concat(command,args) : args;
+   return cp.spawn(cmd, cmdArgs,options || {})
+}
 module.exports = exec;
 

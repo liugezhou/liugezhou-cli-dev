@@ -38,15 +38,15 @@ function checkPkgVersion(){
     log.notice('cli',pkg.version);
 }
 
-function checkNodeVersion(){
-    // 第一步，获取当前Node版本号
-    const currentVersion = process.version;
-    const lowestVersion = constant.LOWEST_NODE_VERSION;
-    // 第二步，比较最低版本号
-   if(!semver.lt(lowestVersion, currentVersion)){
-        throw new Error(colors.red(`liugezhou-cli 需要安装 v${lowestVersion}以上版本的node.js`))
-   }
-}
+// function checkNodeVersion(){
+//     // 第一步，获取当前Node版本号
+//     const currentVersion = process.version;
+//     const lowestVersion = constant.LOWEST_NODE_VERSION;
+//     // 第二步，比较最低版本号
+//    if(!semver.lt(lowestVersion, currentVersion)){
+//         throw new Error(colors.red(`liugezhou-cli 需要安装 v${lowestVersion}以上版本的node.js`))
+//    }
+// }
 
 function checkRoot(){
     const rootCheck = require('root-check');

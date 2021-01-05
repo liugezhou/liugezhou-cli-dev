@@ -3,7 +3,7 @@
 const semver = require('semver');
 const colors = require('colors/safe');
 const log = require('@liugezhou-cli-dev/log');
-const LOWEST_NODE_VERSION = '12.0.0';
+const LOWEST_NODE_VERSION ='12.0.0'
 
 class Command {
     constructor(argv){
