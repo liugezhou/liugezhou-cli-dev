@@ -28,6 +28,8 @@
   },
   "dependencies": {
     "@liugezhou-cli-dev/command": "file:../../models/command",
-    "@liugezhou-cli-dev/log": "file:../../utils/log"
+    "@liugezhou-cli-dev/log": "file:../../utils/log",
+    "fs-extra": "^9.0.1",
+    "inquirer": "^7.3.3"
   }
 }
