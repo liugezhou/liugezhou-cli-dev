@@ -4,6 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const inquirer = require('inquirer')
 const fse = require('fs-extra')
+const semver = require('semver')
 
 const Command = require('@liugezhou-cli-dev/command');
 const log = require('@liugezhou-cli-dev/log')
@@ -88,10 +89,19 @@ class InitCommand extends Command{
             default:'',
             message:'请输入项目名称',
             validate:function(v){
+                const done = this.async();
+                // Do async stuff
+                setTimeout(function() {
+                if (!/^[a-zA-Z]+([-][a-zA-Z][a-zA-Z0-9]*|[_][a-zA-Z][a-zA-Z0-9]*|[a-zA-Z0-9]*)$/.test(v)) {
+                    done('请输入合法的项目名称');
+                    return;
+                }
+                done(null, true);
+                }, 0);
                 // 规则一：输入的首字符为英文字符
                 // 规则二：尾字符必须为英文或数字
                 // 规则三：字符仅允许-和_两种
-                return /^$/.test(v)
+                // \w=a-zA_Z0-9_
             },
             filter:function(v){
                 return v
@@ -99,13 +109,25 @@ class InitCommand extends Command{
         },{
             type:'input',
             name:'projectVersion',
-            default:'',
+            default:'1.0.0',
             message:'请输入项目版本号',
             validate:function(v){
-                return typeof v === 'string'
+                const done = this.async();
+                // Do async stuff
+                setTimeout(function() {
+                if (!(!!semver.valid(v))) {
+                    done('请输入合法的项目版本号');
+                    return;
+                }
+                done(null, true);
+                }, 0);
             },
             filter:function(v){
-                return v
+                if(semver.valid(v)){
+                    return semver.valid(v)
+                } else {
+                    return v
+                }
             },
         }])
             console.log(o)
