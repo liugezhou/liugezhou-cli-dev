@@ -22,10 +22,11 @@ class InitCommand extends Command{
     async exec(){
         try {
         // 1.准备阶段
-        const ret = await this.prepare()
-        if(ret){
+        const projectInfo = await this.prepare()
+        if(projectInfo){
         // 2.下载模版
-
+            downloadTemplate()
+            log.verbose('projectInfo',projectInfo)
         //3.安装模板
         }
         
@@ -34,6 +35,16 @@ class InitCommand extends Command{
         }
         
     } 
+
+    downloadTemplate(){
+        // 通过项目模板API获取模板信息
+        // 1.1通过egg.js搭建一套后端系统
+        // 1.2通过npm项目存储项目模板
+        // 1.3将项目模板信息存储到mongodb数据库中
+        // 1.4通过egg.js获取mongodb中的数据并且通过api返回
+
+    }
+
     async prepare(){
         const localPath = process.cwd()
         //1.判断当前目录是否为空
@@ -70,7 +81,7 @@ class InitCommand extends Command{
 
     async getProjectInfo(){
         //1.选取创建项目或组件
-        const projectInfo = {}
+        let projectInfo = {}
         const {type} = await inquirer.prompt({
             type:'list',
             name:'type',
@@ -83,7 +94,7 @@ class InitCommand extends Command{
         })
         if(type === TYPE_PROJECT){
         //2.获取项目的基本信息
-        const o = await inquirer.prompt([{
+        const project = await inquirer.prompt([{
             type:'input',
             name:'projectName',
             default:'',
@@ -130,7 +141,10 @@ class InitCommand extends Command{
                 }
             },
         }])
-            console.log(o)
+        projectInfo = {
+            type,
+            ...project
+        }
         }else if (type === TYPE_COMPONENT){
 
         }
