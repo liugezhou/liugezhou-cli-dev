@@ -8,6 +8,7 @@ const semver = require('semver')
 
 const Command = require('@liugezhou-cli-dev/command');
 const log = require('@liugezhou-cli-dev/log')
+const getProjectTemplate = require('./getProjectTemplate')
 
 const TYPE_PROJECT = 'project'
 const TYPE_COMPONENT = 'component'
@@ -21,15 +22,15 @@ class InitCommand extends Command{
     }
     async exec(){
         try {
-        // 1.准备阶段
-        const projectInfo = await this.prepare()
-        if(projectInfo){
-        // 2.下载模版
-            downloadTemplate()
-            log.verbose('projectInfo',projectInfo)
-        //3.安装模板
-        }
-        
+            // 1.准备阶段
+            const projectInfo = await this.prepare()
+            if(projectInfo){
+            // 2.下载模版
+                this.projectInfo = projectInfo
+                this.downloadTemplate()
+                log.verbose('projectInfo',projectInfo)
+            //3.安装模板
+            }
         } catch (error) {
             log.error(error.message)
         }
@@ -37,17 +38,24 @@ class InitCommand extends Command{
     } 
 
     downloadTemplate(){
+        console.log(this.projectInfo,this.template)
         // 通过项目模板API获取模板信息
         // 1.1通过egg.js搭建一套后端系统
-        // 1.2通过npm项目存储项目模板
+        // 1.2通过npm存储项目模板
         // 1.3将项目模板信息存储到mongodb数据库中
         // 1.4通过egg.js获取mongodb中的数据并且通过api返回
 
     }
 
     async prepare(){
-        const localPath = process.cwd()
+        //0.判断项目模板是否存在
+        const template = await getProjectTemplate()
+        if(!template || template.length === 0){
+            throw new Error('项目模板不存在！')
+        }
+        this.template = template
         //1.判断当前目录是否为空
+        const localPath = process.cwd()
         if( !this.isDirEmpty(localPath)){
             let ifContinue = false
             if(!this.force){
@@ -140,6 +148,11 @@ class InitCommand extends Command{
                     return v
                 }
             },
+        },{
+            type:'list',
+            name:'projectTemplate',
+            message:'请选择项目模板',
+            choices: this.createTemplateChoice()
         }])
         projectInfo = {
             type,
@@ -151,6 +164,13 @@ class InitCommand extends Command{
 
         return projectInfo
         //return (项目的基本信息：Object)
+    }
+
+    createTemplateChoice(){
+        return this.template.map(item=>({
+            value: item.npmName,
+            name:item.name
+        }))
     }
 
     isDirEmpty(localPath){
