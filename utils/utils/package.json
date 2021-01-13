@@ -18,5 +18,8 @@
   },
   "scripts": {
     "test": "echo \"Run testing from utils\" "
+  },
+  "dependencies": {
+    "cli-spinner": "^0.2.10"
   }
 }

@@ -5,8 +5,11 @@ const path = require('path')
 const inquirer = require('inquirer')
 const fse = require('fs-extra')
 const semver = require('semver')
+const userHome = require('user-home')
 
 const Command = require('@liugezhou-cli-dev/command');
+const Package = require('@liugezhou-cli-dev/package');
+const { spinnerStart } = require('@liugezhou-cli-dev/utils')
 const log = require('@liugezhou-cli-dev/log')
 const getProjectTemplate = require('./getProjectTemplate')
 
@@ -27,7 +30,7 @@ class InitCommand extends Command{
             if(projectInfo){
             // 2.下载模版
                 this.projectInfo = projectInfo
-                this.downloadTemplate()
+                await this.downloadTemplate()
                 log.verbose('projectInfo',projectInfo)
             //3.安装模板
             }
@@ -37,14 +40,31 @@ class InitCommand extends Command{
         
     } 
 
-    downloadTemplate(){
-        console.log(this.projectInfo,this.template)
-        // 通过项目模板API获取模板信息
+    async downloadTemplate(){
+        // 前置工作：通过项目模板API获取模板信息
         // 1.1通过egg.js搭建一套后端系统
         // 1.2通过npm存储项目模板
         // 1.3将项目模板信息存储到mongodb数据库中
         // 1.4通过egg.js获取mongodb中的数据并且通过api返回
-
+        const { projectTemplate } = this.projectInfo
+        const templateInfo = this.template.find(item => item.npmName === projectTemplate)
+        const targetPath = path.resolve(userHome,'.liugezhou-cli-dev','template')
+        const storeDir=path.resolve(userHome,'.liugezhou-cli-dev','template','node_modules')
+        const { npmName, version } = templateInfo
+        const templateNpm = new Package({
+            targetPath,
+            storeDir,
+            packageName:npmName,
+            packageVersion:version
+        })
+        if(!await templateNpm.exists()){
+            const spinner = spinnerStart()
+            await templateNpm.install()
+            await new Promise(resolve => setTimeout(resolve,2000))
+            spinner.stop(true)
+        }else{
+            await templateNpm.update()
+        }
     }
 
     async prepare(){

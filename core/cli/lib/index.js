@@ -76,7 +76,6 @@ function checkArgs(){
 
 function checkEnv(){
     const dotenv = require('dotenv')
-    console.log(userHome)
     const dotenvPath = path.resolve(userHome,'.env')
     if(pathExists(dotenvPath)){
          dotenv.config({
@@ -164,6 +163,5 @@ function  registerCommand(){
 
     if(program.args && program.args.length < 1) {
         program.outputHelp();
-        console.log()
     }
 }

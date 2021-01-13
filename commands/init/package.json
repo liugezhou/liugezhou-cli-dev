@@ -28,10 +28,13 @@
   },
   "dependencies": {
     "@liugezhou-cli-dev/command": "file:../../models/command",
+    "@liugezhou-cli-dev/package": "file:../../models/package",
     "@liugezhou-cli-dev/log": "file:../../utils/log",
     "@liugezhou-cli-dev/request": "file:../../utils/request",
+    "@liugezhou-cli-dev/utils": "file:../../utils/utils",
     "fs-extra": "^9.0.1",
     "inquirer": "^7.3.3",
-    "semver": "^7.3.4"
+    "semver": "^7.3.4",
+    "user-home": "^2.0.0"
   }
 }

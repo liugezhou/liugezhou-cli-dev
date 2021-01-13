@@ -32,7 +32,7 @@ class Package  {
         if(this.storeDir && !pathExists(this.storeDir)){
             fse.mkdirpSync(this.storeDir)
         }
-        if(this.packageVersion ==='latest'){
+        if(this.packageVersion === 'latest'){
             this.packageVersion = await getNpmLatestVersion(this.packageName);
         }
     }
@@ -61,7 +61,7 @@ class Package  {
                 storeDir:this.storeDir,
                 registry:getDefaultRegistry(),
                 pkgs:[{
-                        name:this.PackageName,
+                        name:this.packageName,
                         version:this.packageVersion
                         }
                 ]
