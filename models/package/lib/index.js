@@ -81,7 +81,7 @@ class Package  {
                 storeDir:this.storeDir,
                 registry:getDefaultRegistry(),
                 pkgs:[{
-                        name:this.PackageName,
+                        name:this.packageName,
                         version:latestPackageVersion
                         }
                 ]

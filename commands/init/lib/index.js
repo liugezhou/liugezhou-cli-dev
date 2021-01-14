@@ -9,7 +9,7 @@ const userHome = require('user-home')
 
 const Command = require('@liugezhou-cli-dev/command');
 const Package = require('@liugezhou-cli-dev/package');
-const { spinnerStart } = require('@liugezhou-cli-dev/utils')
+const { spinnerStart, sleep } = require('@liugezhou-cli-dev/utils')
 const log = require('@liugezhou-cli-dev/log')
 const getProjectTemplate = require('./getProjectTemplate')
 
@@ -58,12 +58,27 @@ class InitCommand extends Command{
             packageVersion:version
         })
         if(!await templateNpm.exists()){
-            const spinner = spinnerStart()
-            await templateNpm.install()
-            await new Promise(resolve => setTimeout(resolve,2000))
-            spinner.stop(true)
+            const spinner = spinnerStart('正在下载模板...')
+            await sleep()
+            try {
+                await templateNpm.install()
+                log.success('下载模板成功！')
+            } catch (error) {
+                throw error
+            } finally {
+                spinner.stop(true)
+            }
         }else{
-            await templateNpm.update()
+            const spinner = spinnerStart('正在更新模板...')
+            await sleep()
+            try {
+                await templateNpm.update()
+                log.success('更新模板成功！')
+            } catch (error) {
+                throw error
+            } finally {
+                spinner.stop(true)
+            }
         }
     }
 
