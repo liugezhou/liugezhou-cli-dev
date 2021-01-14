@@ -31,8 +31,8 @@ class InitCommand extends Command{
             // 2.下载模版
                 this.projectInfo = projectInfo
                 await this.downloadTemplate()
-                log.verbose('projectInfo',projectInfo)
             //3.安装模板
+                await this.installTemplate()
             }
         } catch (error) {
             log.error(error.message)
@@ -80,6 +80,10 @@ class InitCommand extends Command{
                 spinner.stop(true)
             }
         }
+    }
+
+    async installTemplate(){
+        console.log(this.template)
     }
 
     async prepare(){
