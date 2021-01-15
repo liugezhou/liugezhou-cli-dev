@@ -1,9 +1,9 @@
 'use strict';
 
-const cp = require('child_process')
-const path = require('path')
-const log = require('@liugezhou-cli-dev/log')
-const Package = require("@liugezhou-cli-dev/package")
+   const path = require('path')
+   const log = require('@liugezhou-cli-dev/log')
+   const Package = require("@liugezhou-cli-dev/package")
+   const { exec:spawn } = require("@liugezhou-cli-dev/utils")
 
 const SETTINGS = {
    init: '@imooc-cli/init'
@@ -86,12 +86,6 @@ async function exec() {
    // 4. Package.update / Package.install
 
    // 封装--复用
-}
-function spawn(command,args,options){
-   const win32 = process.platform === 'win32';
-   const cmd = win32 ? 'cmd': command
-   const cmdArgs = win32  ?  ['/c'].concat(command,args) : args;
-   return cp.spawn(cmd, cmdArgs,options || {})
 }
 module.exports = exec;
 
