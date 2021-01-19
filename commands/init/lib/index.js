@@ -103,8 +103,10 @@ class InitCommand extends Command{
                 this.templateInfo.type = TEMPLATE_TYPE_NORMAL
             }
             if(this.templateInfo.type === TEMPLATE_TYPE_NORMAL){
+                //标准安装
                 await this.installNormalTemplate()
             }else if(this.templateInfo.type === TEMPLATE_TYPE_CUSTOM){
+                //自定义安装
                 await this.installCustomTemplate()
             }else{
                 throw new Error('项目模板信息无法识别！')
@@ -178,7 +180,7 @@ class InitCommand extends Command{
         const spinner = spinnerStart('正在安装模板...')
         await sleep()
         try {
-            const templatePath = path.resolve(this.templateNpm.chacheFilePath,'template')
+            const templatePath = path.resolve(this.templateNpm.cacheFilePath,'template')
             const targetPath = process.cwd()
             fse.ensureDirSync(templatePath)//确保使用前目录存在
             fse.ensureDirSync(targetPath)
@@ -199,7 +201,25 @@ class InitCommand extends Command{
         await this.execCommand(startCommand,'启动命令执行失败失败！')
     }
     async installCustomTemplate(){
-        console.log('安装自定义模板')
+        //查询自定义模版的入口文件
+        if(await this.templateNpm.exists()){
+            const rootFile = this.templateNpm.getRootFilePath()
+            if(fs.existsSync(rootFile)){
+                log.verbose('开始执行自定义模板')
+                const templatePath = path.resolve(this.templateNpm.cacheFilePath, 'template');
+                const options = {
+                    templateInfo: this.templateInfo,
+                    projectInfo: this.projectInfo,
+                    sourcePath: templatePath,
+                    targetPath: process.cwd(),
+                  };
+                const code = `require('${rootFile}')(${JSON.stringify(options)})`
+                await execAsync('node',  ['-e', code], {stdio:'inherit',cwd: process.cwd()})
+                log.success('自定义模版安装成功')
+            }else{
+                throw new Error('自定义模板入口文件不存在')
+            }
+        }
     }
 
     async prepare(){
@@ -252,7 +272,6 @@ class InitCommand extends Command{
             isProjectNameValid = true;
             projectInfo.projectName = this.projectName;
           }
-         
         //1.选取创建项目或组件
         const { type } = await inquirer.prompt({
             type:'list',
@@ -326,11 +345,12 @@ class InitCommand extends Command{
                 message:`请选择${title}模板`,
                 choices: this.createTemplateChoice()
             })
+
         if(type === TYPE_PROJECT){
         //2.获取项目的基本信息
-        
         const project = await inquirer.prompt(projectPrompt)
         projectInfo = {
+            ...projectInfo,
             type,
             ...project
         }

@@ -25,7 +25,7 @@ class Package  {
         // package的version
         this.packageVersion = options.packageVersion;
         // package的缓存目录前缀
-        this.chacheFilePathPrefix = this.packageName.replace('/', '_')
+        this.cacheFilePathPrefix = this.packageName.replace('/', '_')
     }
 
     async prepare(){
@@ -37,18 +37,18 @@ class Package  {
         }
     }
 
-    get chacheFilePath() {
-        return path.resolve(this.storeDir,`_${this.chacheFilePathPrefix}@${this.packageVersion}@${this.packageName}`)
+    get cacheFilePath() {
+        return path.resolve(this.storeDir,`_${this.cacheFilePathPrefix}@${this.packageVersion}@${this.packageName}`)
     }
 
-    getSpecificChacheFilePath(packageVersion){
-        return path.resolve(this.storeDir,`_${this.chacheFilePathPrefix}@${packageVersion}@${this.packageName}`)
+    getSpecificCacheFilePath(packageVersion){
+        return path.resolve(this.storeDir,`_${this.cacheFilePathPrefix}@${packageVersion}@${this.packageName}`)
     }
     // 判断当前Package是否存在
     async exists(){
         if(this.storeDir){
             await this.prepare()
-            return pathExists(this.chacheFilePath);
+            return pathExists(this.cacheFilePath);
         }else{
             return pathExists(this.targetPath);
         }
@@ -73,7 +73,7 @@ class Package  {
         //获取最新的npm模块版本号
         const latestPackageVersion = await getNpmLatestVersion(this.packageName);
         // 查询最新版本号对应的路径是否存在
-        const latestFilePath = this.getSpecificChacheFilePath(latestPackageVersion)
+        const latestFilePath = this.getSpecificCacheFilePath(latestPackageVersion)
         // 如果不存在，则直接安装最新版本
         if(!pathExists(latestFilePath)){
             await npminstall({
