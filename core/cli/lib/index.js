@@ -28,7 +28,7 @@ async function core() {
         registerCommand();
     }catch(e){
         log.error(e.message)
-        if(process.debug){
+        if(program.debug){
             console.log(e)
         }
     }
